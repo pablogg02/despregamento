@@ -1,2 +1,13 @@
 a. Con el xampp instalado, iniciar el servidor Tomcat. Ir al navegador y escribir localhost:8080
-b. 
+b. Ahora vamos al archivo de configuración de usuarios de tomcat. En este caso con el xampp, la ruta es
+  xampp/tomcat/conf/tomcat-users.xml y lo editamos y añadimos usuarios: 
+  <tomcat-users>
+    <role rolename="manager-gui"/>
+    <role rolename="manager-script"/>
+    <user username="usuario" password="contraseña" roles="manager-gui"/>
+    <user username="usuario2" password="contraseña" roles="manager-script"/>
+  </tomcat-users>
+  Escribimos en el navegador: http://localhost:8080/manager/html/ e insertamos el usuario y contraseña que hayamos introducido
+  con el rol manager-gui.
+  
+c. 
