@@ -10,4 +10,7 @@ b. Ahora vamos al archivo de configuración de usuarios de tomcat. En este caso 
   Escribimos en el navegador: http://localhost:8080/manager/html/ e insertamos el usuario y contraseña que hayamos introducido
   con el rol manager-gui.
   
-c. 
+d. Para desplegar nuestra aplicación web copiamos el archivo y lo pegamos en la ruta tomcat/webapps.
+e. Podemos cambiar el puerto donde escucha tomcat, localizando el fichero server.xml en la ruta tomcat/conf. Editamos el 
+  archivo y buscamos la linea que contiene "Connector port='8080'", y cambiamos la línea para que escuche en el puerto que 
+  queremos usar.
