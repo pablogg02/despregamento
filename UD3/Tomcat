@@ -32,7 +32,6 @@ a.
 
 <role rolename="admin-gui" />
 <user username="tomcat" password="tomcat" roles="manager-gui,admin-gui" />
-</tomcat-users>
 - Para quitar la restricción a la página de admin: sudo nano /opt/tomcat/webapps/manager/META-INF/context.xml
 - Comentar la linea <Valve />: <!--  <Valve className="org.apache.catalina.valves.RemoteAddrValve"
          allow="127\.\d+\.\d+\.\d+|::1|0:0:0:0:0:0:0:1" /> -->
@@ -40,7 +39,7 @@ a.
 - Para seguir, hay que saber donde se encuentra Java: sudo update-java-alternatives -l
 - El resultado tendría que ser similar a: /usr/lib/jvm/java-1.11.0-openjdk-amd64
 - Creamos el archivo: sudo nano /etc/systemd/system/tomcat.service
-- Pegamos: 
+- Pegamos el siguiente texto con el resultado anterior: 
 [Unit]
 Description=Tomcat
 After=network.target
