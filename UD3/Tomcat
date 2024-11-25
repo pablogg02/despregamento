@@ -19,11 +19,11 @@ e. Podemos cambiar el puerto donde escucha tomcat, localizando el fichero server
 2. Instalación, configuración y funcionamiento de Tomcat en Linux
 a. 
 - Usamos el siguiente comando para crear un usuario llamado tomcat: sudo useradd -m -d /opt/tomcat -U -s /bin/false tomcat
-- Hacemos un update antes de seguir con el JDK: sudo apt update
 - Instalamos el jdk: sudo apt install default-jdk
+- Para ver que version tenemos instalada: java -version
 - Vamos al directorio /tmp: cd /tmp
-- Ejecutamos el comando para instalar tomcat(cambiar según versión): wget https://downloads.apache.org/tomcat/tomcat-11/v11.0.1/bin/apache-tomcat-11.0.1.tar.gz
-- Extraemos el archivo que hemos descargado (cambiar versión): sudo tar xzvf apache-tomcat-11*tar.gz -C /opt/tomcat --strip-components=1
+- Ejecutamos el comando para instalar tomcat(cambiar según versión): wget https://dlcdn.apache.org/tomcat/tomcat-10/v10.1.33/bin/apache-tomcat-10.1.33.tar.gz
+- Extraemos el archivo que hemos descargado (cambiar versión): sudo tar xzvf apache-tomcat-10*tar.gz -C /opt/tomcat --strip-components=1
 - Damos permisos: sudo chown -R tomcat:tomcat /opt/tomcat/    sudo chmod -R u+x /opt/tomcat/bin
 - Abrimos el fichero tomcat-users.xml: sudo nano /opt/tomcat/conf/tomcat-users.xml
 - Pegamos al final del fichero (cambié los usuarios y las contraseñas a tomcat): 
@@ -69,5 +69,58 @@ WantedBy=multi-user.target
 - Recargamos: sudo systemctl daemon-reload
 - Iniciamos el servicio Tomcat: sudo systemctl start tomcat
 - Habilitamos el inicio de Tomcat: sudo systemctl enable tomcat
-- Permitimos el tráfico en el puerto 8080: sudo ufw allow 8080
-- Accedemos desde el navegador a Tomcat: http://your_server_ip:8080
+- Accedemos desde el navegador a Tomcat: http://localhost:8080
+
+b. 
+- Descargamos el archivo .war
+- Vamos a la manager app de tomcat y ponemos usuario y contraseña: http://localhost:8080/manager/html
+- Bajamos hasta la parte WAR file to deploy y seleccionamos el archivo WAR.
+- Escribimos en el navegador: http://localhost:8080/sample/
+
+c.
+- Para crear un certificado escribimos en la terminal: sudo keytool -genkey -alias pablo -keyalg RSA -keystore /etc/ssl/pablo.keystore
+- Rellenamos los datos y aceptamos
+- Abrir el archivo de configuración: sudo nano /opt/tomcat/conf/server.xml
+- Pegamos: 
+<Connector port="8443" protocol="org.apache.coyote.http11.Http11NioProtocol"
+maxThreads="150" SSLEnabled="true">
+<SSLHostConfig>
+<Certificate certificateKeystoreFile="/etc/ssl/tomcat.keystore"
+certificateKeystorePassword="(contraseñaDelKeystore)"
+type="RSA"/>
+</SSLHostConfig>
+</Connector>
+- Abrir el puerto HTTPS en el FireWall con los comandos:
+sudo ufw allow 8433
+sudo ufw reload
+sudo ufw enable
+sudo ufw reload
+sudo systemctl restart tomcat
+- Acceder a tomcat por HTTPS: https://localhost:8443/
+
+4. Integración con un IDE (Visual Studio Code)
+- Lo primero que hice fue instalar VSCode desde la página oficial.
+- Desde la terminal escribir: cd Downloads
+- Instalar el archivo: sudo dpkg -i code_*.deb
+- Para abrir el VSCode escribir en la terminal: code
+- Ir a la página de tomcat: https://tomcat.apache.org/download-10.cgi
+- Descargar el archivo .zip De la versión (Core)
+- Vamos a la ruta donde descargamos el archivo .zip y lo extraemos
+- Ahora instalamos la extensión para VSCode: Community Server Connectors
+- En la pestaña Servers añadiremos un servidor nuevo, seleccionamos "No, usar un servidor en el disco" y cogemos el archivo que extraímos antes.
+- Una vez añadido, hacemos click derecho en el servidor tomcat y le damos a start.
+
+5. Cuestiones
+a) ¿Qué version de Apache Tomcat instalarás dependiendo de tu versión de Java?
+Habría que ver la versión de Java que tenemos instalada e instalaríamos la versión de Tomcat compatible. En este caso
+tenía Java 11.0.14.1 e instalé tomcat 10.1.33 (Apache Tomcat - Which Version?)
+a.1) Y para la versión 8?
+Para la versión 8 son compatibles Tomcat 8.5, Tomcat 9.x
+a.2) Y para la versión 21?
+Para versiones de Java mayores a la 20 Tomcat 10.1.x o superiores
+b) ¿Qué otros servidores de aplicaciones hay en el mercado? ¿Cuáles son software libre y cuales productos comerciales?
+WildFly, WebLogic, WebSphere... Tomcat y WildFly por ejemplo son de software libre, y WebLogic y WebSphere son de pago.
+c) Una de las cuestiones a tener en cuenta es el rendimiento de las aplicaciones. ¿Sabrías indicar alguna herramienta para pruebas de carga?
+Apache Jmeter, LoadRunner, Gatling...
+d) Otra de las cuestiones a tener en cuenta es la monitorización del servidor de aplicaciones. ¿Sabrías indicarme alguna herramienta para monitorizar tomcat u otro servidor de aplicaciones? ¿Qué indicadores puede interesar monitorizar?
+Jetty(Java), Netty(Java), Broadvision (JavaScript)...
