@@ -1,5 +1,0 @@
-- En primer lugar actualizamos: sudo apt update
-- Instalé php con el comando: sudo apt -y install php8.1
-- Descargué el archivo .phar desde el link: https://phpdoc.org/phpDocumentor.phar
-- Desde el directorio /Descargas ejecuté el comando: php phpDocumentor.phar run -d . -t docs/api
-- 
